@@ -2,6 +2,12 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
+#f=función que recibe
+#a=cota inferior
+#b=cota superior
+#N= numero de iteraciones
+#IV=valores iniciales
+
 def heun( f, a, b, N, IV ):
     h = (b-a)/float(N)
     t = np.arange( a, b+h, h )
@@ -23,6 +29,7 @@ def euler( f, a, b, N, IV ):
         w[i] = w[i-1] + h * f( t[i-1], w[i-1] )
     return w,t
 
+#Evalua una funció matemática
 def evalua(f,a,b,N,IV):
     h=(b-a)/float(N)
     t=np.arange(a,b+h,h)
@@ -32,7 +39,7 @@ def evalua(f,a,b,N,IV):
         w[i] = f(t[i-1],w[i-1])
     return w,t
 
-
+#Calcula el error de cada punto.
 def errorRelativoArray(analitica,numerica):
     if (len(analitica)==len(numerica)):
         error=[]
@@ -40,29 +47,23 @@ def errorRelativoArray(analitica,numerica):
             error.append(np.absolute((analitica[i]-numerica[i])/analitica[i])*100)
         return error;
 
-
+#Función f(x,y)=2*x*y
 def f(x,y):
     return 2*x*y
 
-#Analitic e**(x**2-1)
+#Analitica e**(x**2-1)
 def f1(x,y):
     return np.exp(x**2-1)
 
+#Llamamos a las funciones con sus parametr:os
 heun=np.array(heun(f,1,5,10,[1,1]))
 euler=np.array(euler(f,1,5,10,[1,1]))
 analitica=np.array(evalua(f1,1,5,10,[1,1]))
 
+#Llamamos a la función que calcula el error
 heunError=np.array(errorRelativoArray(analitica[0],heun[0]))
 eulerError=np.array(errorRelativoArray(analitica[0],euler[0]))
 
-
-def sumaDeArreglos(array1,array2):
-    if (len(array1)==len(array2)):
-        res=[]
-        for i in range(len(array1)):
-            res.append(array1[i]+array2[i])
-        return error;
-print(heun)
 print(heunError)
 print(eulerError)
 
@@ -75,4 +76,14 @@ plt.ylabel('y(x)')
 plt.legend(loc=1)
 plt.grid()
 plt.savefig( 'ecomparacion.png', fmt='PNG', dpi=100 )
+plt.show()
+
+plt.plot( heun[1], heunError, label='Heun Error' )
+plt.plot( euler[1], eulerError, label='Euler Error' )
+plt.title( "Error" )
+plt.xlabel('x')
+plt.ylabel('Error')
+plt.legend(loc=1)
+plt.grid()
+plt.savefig( 'error.png', fmt='PNG', dpi=100 )
 plt.show()
