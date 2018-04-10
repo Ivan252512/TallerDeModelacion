@@ -17,7 +17,7 @@ def f(x,y):
 
 # Solución analítica
 def y(x):
-    return -(1/2)*(x**4)+4*(x**3)-10*(x**2)+8.5*x
+    return -(1/2)*(x**4)+4*(x**3)-10*(x**2)+8.5*x+1
 
 
 num=funciones.puntomediometh(f, a, b, h, VI)
@@ -33,7 +33,7 @@ plt.ylabel('y(x)')
 plt.subplot(212)
 plt.plot(num[0],error,label='Error')
 plt.legend(loc=2)
-plt.xlabel('x')
+plt.xlabel('x(h=0.5)')
 plt.ylabel('Error [%]')
 plt.savefig( 'PuntoMedio.png', fmt='PNG', dpi=100 )
 plt.show()

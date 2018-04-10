@@ -62,7 +62,7 @@ def rk5(f,a,b,h,VI):
         y[i] = y[i-1] + ((1/90)*(7*k1 + 32*k3 + 12*k4 + 32*k5 + 7*k6)*h)
     return x,y
 
-#Evalua una funció matemática
+#Evalua una función matemática
 def evalua(f,a,b,h,IV):
     N=int((b-a)/h)
     x=np.arange(a,b+h,h)
