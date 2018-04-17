@@ -1,0 +1,86 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{wrapfig}
+\usepackage{afterpage}
+\setcitestyle{square}
+\usepackage[export]{adjustbox}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{afterpage}
+\usepackage{setspace}
+\spanishdecimal{.}
+
+\author{C. Iván Pineda S.\textsuperscript{1} }
+\title{Práctica 6\\ Taller de Modelación Numérica}
+\date {\textit{\textsuperscript{1}Universidad Nacional Autónoma de México}
+\\ 17 de Abril de 2017}
+
+\begin{document}
+\maketitle
+
+Ejercicio: Implementar funciones para los métodos de Runge-Kutta de 4$^{\circ}$
+orden en 2 y 3 dimensiones para resolver :
+
+a) El PVI:
+
+\[
+f(x,y) = \left\lbrace
+\begin{array}{ll}
+y''+xy'+y=0, & x\in[0,10] \\
+y(0)=1  & y'(0)=2
+\end{array}
+\right.
+\]
+
+b)Atractor de Rösler:
+
+\[
+x'=-y-z
+\]
+
+\[
+y'=x+Ay
+\]
+
+\[
+z'=B+z(x-c)
+\]
+
+Donde:
+
+\[
+A=0.2 \qquad A=0.1
+\]
+
+\[
+B=0.2 \qquad B=0.1
+\]
+
+\[
+C=5.7 \qquad C<14
+\]
+
+c)Atractor de Lorenz:
+
+\[
+x'=\sigma (y-x) \qquad \sigma=0.7
+\]
+
+\[
+y'=\rho x-y-xy \qquad \rho=0.5
+\]
+
+\[
+z'=-\beta z+xy \qquad \beta=0.5
+\]
+
+$\cdot$ Graficar cada una de las soluciones en el dominio correspondiente y el
+retrato fase.
+
+\end{document}
