@@ -1,80 +1,50 @@
 import numpy as np
+import sympy
+import matplotlib.pyplot as plt
 
-def heun_method(f, n, m, h, VI):
-    N=int((m-n)/h)
-    x = np.arange(n, m+h, h)          # crear malla
-    y = np.zeros((N+1,))                # ininio y
-    x[0], y[0] = VI                     # valores iniciales
-    for i in range(1,N+1):              # Aplicando método de Heun
-        k1 = f(x[i-1], y[i-1])
-        k2 = f(x[i-1]+h, y[i-1] + k1*h)
-        y[i] = y[i-1] + ((1/2)*k1 + (1/2)*k2)*h
-    return x,y
-
-def puntomediometh(f, a, b, h, VI):
-    N=int((b-a)/h)
-    x = np.arange( a, b+h, h )
+def rk4(f,g,a,b,dt,VI):
+    N=int((b-a)/dt)
+    x = np.arange(a, b+dt, dt)
     y = np.zeros((N+1,))
-    x[0], y[0] = VI
+    r = np.zeros((N+1,))
+    x[0], y[0], r[0] = VI
     for i in range(1,N+1):
-        k1 = f(x[i-1],y[i-1])
-        k2 = f(x[i-1] + (1/2)*h, y[i-1] + (1/2)*k1*h)
-        y[i] = y[i-1] + (k2*h)
-    return x,y
+        k1x=dt*f(x[i-1],y[i-1],r[i-1])
+        k1y=dt*g(x[i-1],y[i-1],r[i-1])
+        k2x=dt*f(x[i-1]+dt/2,y[i-1]+k1x/2.0,r[i-1]+k1y/2.0)
+        k2y=dt*g(x[i-1]+dt/2,y[i-1]+k1x/2.0,r[i-1]+k1y/2.0)
+        k3x=dt*f(x[i-1]+dt/2,y[i-1]+k2x/2.0,r[i-1]+k2y/2.0)
+        k3y=dt*g(x[i-1]+dt/2,y[i-1]+k2x/2.0,r[i-1]+k2y/2.0)
+        k4x=dt*f(x[i-1]+dt,y[i-1]+k3x,r[i-1]+k3y)
+        k4y=dt*g(x[i-1]+dt,y[i-1]+k3x,r[i-1]+k3y)
+        y[i]=y[i-1]+(k1x+2.0*k2x+2.0*k3x+k4x)/6.0
+        r[i]=r[i-1]+(k1y+2.0*k2y+2.0*k3y+k4y)/6.0
+    return x,y,r
 
-def Ralston_meth(f, n, m, h, VI):
-    N=int((m-n)/h)
-    x = np.arange(n, m+h, h)          # crear malla
-    y = np.zeros((N+1,))                # inicio y
-    x[0], y[0] = VI                     # valores iniciales
-    for i in range(1,N+1):              # Aplicando método de Heun
-        k1 = f(x[i-1], y[i-1])
-        k2 = f(x[i-1]+(3/4)*h, y[i-1] + (3/4)*k1*h)
-        y[i] = y[i-1] + ((1/3)*k1 + (2/3)*k2)*h
-    return x,y
-
-def rk4(f,a,b,h,VI):
+def rk43ind(f,g,e,a,b,h,VI):
     N=int((b-a)/h)
-    x = np.arange(a, b+h, h)          # malla
-    y = np.zeros((N+1,))                # y
-    x[0], y[0] = VI                     # valores iniciales
-    for i in range(1,N+1):              # aplicando el método
-        k1 = f(x[i-1], y[i-1])
-        k2 = f((x[i-1] + ((1/2)*h)), (y[i-1] + (1/2)*k1*h))
-        k3 = f(x[i-1] + ((1/2)*h), (y[i-1] + (1/2)*k2*h))
-        k4 = f((x[i-1] + h), (y[i-1] + k3*h))
-        y[i] = y[i-1] + ((1/6)*(k1 + 2*k2 + 2*k3 + k4)*h)
-    return x,y
-
-def rk5(f,a,b,h,VI):
-    N=int((b-a)/h)
-    x = np.arange(a, b+h, h)          # malla
-    y = np.zeros((N+1,))                # y
-    x[0], y[0] = VI                     # valores iniciales
-    for i in range(1,N+1):              # Aplicando el método
-        k1 = f(x[i-1], y[i-1])
-        k2 = f(x[i-1] + ((1/4)*h), y[i-1] + ((1/4)*k1*h))
-        k3 = f(x[i-1] + ((1/4)*h), y[i-1] + ((1/8)*k1*h) + ((1/8)*k2*h))
-        k4 = f(x[i-1] + ((1/2)*h), y[i-1] - ((1/2)*k2*h) + (k3*h))
-        k5 = f(x[i-1] + ((3/4)*h), y[i-1] + ((3/16)*k1*h) + ((9/46)*k4*h))
-        k6 = f(x[i-1], y[i-1] - ((3/7)*k1*h) + ((2/7)*k2*h) + ((12/7)*k3*h)
-               + ((12/7)*k4*h) + ((8/5)*k5*h))
-        y[i] = y[i-1] + ((1/90)*(7*k1 + 32*k3 + 12*k4 + 32*k5 + 7*k6)*h)
-    return x,y
-
-#Evalua una función matemática
-def evalua(f,a,b,h,IV):
-    N=int((b-a)/h)
-    x=np.arange(a,b+h,h)
+    x = np.arange(a, b+h, h)
     y = np.zeros((N+1,))
-    x[0], y[0] = IV
+    z = np.zeros((N+1,))
+    x[0], y[0], z[0] = VI
     for i in range(1,N+1):
-        y[i] = f(x[i])
-    return x,y
+        k1x = h*f(x[i-1], y[i-1], z[i-1])
+        k1y = h*g(x[i-1], y[i-1], z[i-1])
+        k1z = h*e(x[i-1], y[i-1], z[i-1])
 
-def errorRelativoArray(analitica,numerica):
-    if (len(analitica)==len(numerica)):
-        analitica=np.array(analitica)
-        numerica=np.array(numerica)
-        error=(np.abs((analitica-numerica)/analitica))*100
-        return error
+        k2x = h*f(x[i-1]+ k1x/2.0, y[i-1] + k1y/2.0, z[i-1] + k1z/2.0)
+        k2y = h*g(x[i-1]+ k1x/2.0, y[i-1] + k1y/2.0, z[i-1] + k1z/2.0)
+        k2z = h*e(x[i-1]+ k1x/2.0, y[i-1] + k1y/2.0, z[i-1] + k1z/2.0)
+
+        k3x = h*f(x[i-1]+ k2x/2.0, y[i-1] + k2y/2.0, z[i-1] + k2z/2.0)
+        k3y = h*g(x[i-1]+ k2x/2.0, y[i-1] + k2y/2.0, z[i-1] + k2z/2.0)
+        k3z = h*e(x[i-1]+ k2x/2.0, y[i-1] + k2y/2.0, z[i-1] + k2z/2.0)
+
+        k4x = h*f(x[i-1]+ k3x, y[i-1] + k3y, z[i-1] + k3z)
+        k4y = h*g(x[i-1]+ k3x, y[i-1] + k3y, z[i-1] + k3z)
+        k4z = h*e(x[i-1]+ k3x, y[i-1] + k3y, z[i-1] + k3z)
+
+        x[i] = x[i-1] + k1x/6.0 + k2x/3.0 + k3x/3.0 + k4x/6.0
+        y[i] = y[i-1] + k1y/6.0 + k2y/3.0 + k3y/3.0 + k4y/6.0
+        z[i] = z[i-1] + k1z/6.0 + k2z/3.0 + k3z/3.0 + k4z/6.0
+    return x,y,z
