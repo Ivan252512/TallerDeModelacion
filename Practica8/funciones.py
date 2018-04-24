@@ -1,5 +1,6 @@
 import numpy as np
 
+"""Implementa el método de Runge-Kutta en 4 dimensiones"""
 def rk45ind(f,g,e,k,l,a,b,h,VI):
     N=int((b-a)/h)
     x = np.arange(a, b+h, h)
@@ -48,4 +49,4 @@ def rk45ind(f,g,e,k,l,a,b,h,VI):
         z[i] = z[i-1] + k1z/6.0 + k2z/3.0 + k3z/3.0 + k4z/6.0
         y2[i] = y2[i-1] + k1u/6.0 + k2u/3.0 + k3u/3.0 + k4u/6.0
         z2[i] = z2[i-1] + k1v/6.0 + k2v/3.0 + k3v/3.0 + k4v/6.0
-    return x,y,z,y2,z
+    return x,y,z,y2,z2

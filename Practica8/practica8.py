@@ -2,12 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import funciones
 
+"""Constantes en el sistema de ecuaciones diferenciales"""
 L=50
 T=300
 W=50
 E=12000000
 I=4
 
+"""Funciones a resolver"""
 def f(x,y,u1,y2,u2):
     return x
 
@@ -23,9 +25,9 @@ def k(x,y,u1,y2,u2):
 def l(x,y,u1,y2,u2):
     return T/(E*I)*y2
 
-a=0;
-b=L;
-stp=0.1;
+a=0; #Inicio del dominio.
+b=L; #Fin del dominio.
+stp=0.1; #Pasos entre cada punto.
 
 num=funciones.rk45ind(f,g,e,k,l,a,b,stp,[0,0,0,1])
 
