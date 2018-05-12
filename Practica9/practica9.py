@@ -38,9 +38,33 @@ ydet=(np.array(num[1])+beta-((num[1][len(num[1])-1])/num[3][len(num[3])-1]) *
 
 plt.figure(figsize=(20,10))
 plt.plot(num[0],ydet,label=" y'' = -2yy' + ty' + y + t ")
-plt.title("Práctica 9")
+plt.title("Práctica 9 1<=t<=1.5 ")
 plt.ylabel("y(t)")
 plt.xlabel('t')
 plt.legend(loc=2)
-plt.savefig( 'practica9.png', fmt='PNG', dpi=400 )
+plt.savefig( 'practica9_1.png', fmt='PNG', dpi=400 )
 plt.show()
+
+
+a=1.5; #Inicio del dominio.
+b=2; #Fin del dominio.
+stp=0.01; #Pasos entre cada punto.
+m0=-2
+
+num=rk.rk45ind(g,e,k,l,a,b,stp,[0,m0,0,1])
+#y(t)=y1(t)+beta-(y1(b)/z(b))*z(t)  ,z(b)!=0
+beta=0
+
+ydet=(np.array(num[1])+beta-((num[1][len(num[1])-1])/num[3][len(num[3])-1]) *
+     np.array(num[3]))
+
+
+plt.figure(figsize=(20,10))
+plt.plot(num[0],ydet,label=" y'' = -2yy' + ty' + y + t ")
+plt.title("Práctica 9 1.5<=t<=2 ")
+plt.ylabel("y(t)")
+plt.xlabel('t')
+plt.legend(loc=2)
+plt.savefig( 'practica9_2.png', fmt='PNG', dpi=400 )
+plt.show()
+
