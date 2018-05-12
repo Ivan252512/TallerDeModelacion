@@ -28,9 +28,9 @@ b=2; #Fin del dominio.
 stp=0.01; #Pasos entre cada punto.
 m0=-2
 w=1e-6
-beta=0
+beta=-2
 
-plt.figure(figsize=(25,12))
+plt.figure(figsize=(20,9))
 
 while(w>1e-7):
 	num=rk.rk45ind(g,e,k,l,a,b,stp,[0,m0,0,1])
@@ -48,7 +48,7 @@ while(w>1e-7):
 
 	zb=num[3][len(num[3])-1]
 	yb=num[1][len(num[1])-1]
-	dif=yb-(-2)
+	dif=yb-beta
 	w=abs(dif)
 	m0=m0-(dif/zb)
 plt.plot(num[0],num[1],  linestyle='--', color='r',
