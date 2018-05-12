@@ -27,23 +27,34 @@ a=1; #Inicio del dominio.
 b=2; #Fin del dominio.
 stp=0.01; #Pasos entre cada punto.
 m0=-2
-w=1
+w=1e-6
 beta=0
 
-plt.figure(figsize=(15,7))
+plt.figure(figsize=(25,12))
 
 while(w>1e-7):
 	num=rk.rk45ind(g,e,k,l,a,b,stp,[0,m0,0,1])
 	#y(t)=y1(t)+beta-(y1(b)/z(b))*z(t)  ,z(b)!=0
-	ydet=(np.array(num[1])+beta-((num[1][len(num[1])-1])/
+	ydet=(np.array(num[1])+((beta-((num[1][len(num[1])-1])))/
 		  num[3][len(num[3])-1]) * np.array(num[3]))
-	plt.plot(num[0],ydet,label="w = " + str(w) + ", m0 = " + str(m0))
-	w=abs((num[3][len(num[3])-1])-(-2))
-	m0=m0-((num[3][len(num[3])-1]-(-2))/num[1][len(num[1])-1])
+	plt.subplot(211)
+	plt.plot(num[0],ydet, label="w = " + str(w) + ", m0 = " + str(m0))
+	plt.legend(loc=1)
+	plt.title("Práctica 9 " +"\n" + "y'' = -2yy' + ty' + y + t")
+	plt.ylabel("y(t)")
 
-plt.title("Práctica 9 " +"\n" + "y'' = -2yy' + ty' + y + t")
-plt.ylabel("y(t)")
-plt.xlabel('t')
+	plt.subplot(212)
+	plt.plot(num[0],num[1])
+
+	zb=num[3][len(num[3])-1]
+	yb=num[1][len(num[1])-1]
+	dif=yb-(-2)
+	w=abs(dif)
+	m0=m0-(dif/zb)
+plt.plot(num[0],num[1],  linestyle='--', color='r',
+		 label = "Mejor Solución")
 plt.legend(loc=1)
+plt.ylabel('y1(t)')
+plt.xlabel('t')
 plt.savefig( 'practica9.png', fmt='PNG', dpi=400 )
 plt.show()
