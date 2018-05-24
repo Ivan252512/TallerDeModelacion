@@ -63,6 +63,7 @@ def poblacion(cantidad,bitsDeCadaIndividuo):
    lista con individuos(cadenas de binarios) a evaluar, selecciona al 50% más
    apto, los reproduce y la descendencia remplaza al 50% menos apto"""
 
+
 def evolucion(f,a,b,t,individuosx,individuosy,individuost,iteraciones):
     print("---------------------------------------------------------")
     if len(individuosx)!=len(individuosy)!=len(individuost):
@@ -72,7 +73,7 @@ def evolucion(f,a,b,t,individuosx,individuosy,individuost,iteraciones):
     for i in range(len(individuosx)):
         evaluacion.append([f(binToDec(individuosx[i],a,b),
                              binToDec(individuosy[i],a,b),
-                             binToDec(individuost[i],0,t)),
+                             int(binToDec(individuost[i],0,t))),
                              individuosx[i],
                              individuosy[i],
                              individuost[i]])
@@ -89,14 +90,15 @@ def evolucion(f,a,b,t,individuosx,individuosy,individuost,iteraciones):
                             mejores50[random.randint(0,len(mejores50)-1)][2]),
                       cruza(mejores50[random.randint(0,len(mejores50)-1)][3],
                             mejores50[random.randint(0,len(mejores50)-1)][3])])
-    #Mutación, solo los hijos mutan, escogemos el 10% al azar.
+    #Mutación, solo los hijos mutan, escogemos el 10% al azar, 2 veces.
     for i in range(int(len(hijos)*0.1)):
-        randx=random.randint(0,len(hijos)-1)
-        hijos[randx][0]=mutacion(hijos[randx][0])
-        randy=random.randint(0,len(hijos)-1)
-        hijos[randy][1]=mutacion(hijos[randy][1])
-        randt=random.randint(0,len(hijos)-1)
-        hijos[randt][2]=mutacion(hijos[randt][2])
+        for i in range(5):
+            randx=random.randint(0,len(hijos)-1)
+            hijos[randx][0]=mutacion(hijos[randx][0])
+            randy=random.randint(0,len(hijos)-1)
+            hijos[randy][1]=mutacion(hijos[randy][1])
+            randt=random.randint(0,len(hijos)-1)
+            hijos[randt][2]=mutacion(hijos[randt][2])
     #Junta a los padres y a los hijos
     nuevaGeneracion=mejores50bin+hijos
     genx=[]
@@ -109,7 +111,8 @@ def evolucion(f,a,b,t,individuosx,individuosy,individuost,iteraciones):
     if(iteraciones==0):
         decimales=[]
         for i in nuevaGeneracion:
-            decimales.append([binToDec(i[0],a,b),binToDec(i[1],a,b),binToDec(i[2],0,t)])
-        return np.mean(np.array(decimales),axis=0)
+            decimales.append([binToDec(i[0],a,b),binToDec(i[1],a,b),
+                              int(binToDec(i[2],0,t))])
+        return decimales
     else:
         return  evolucion(f,a,b,t,genx,geny,gent,iteraciones-1)

@@ -6,8 +6,8 @@ pi = 3.141592654
 dospi=2*pi
 pimedios=pi/2
 rship=1.01
-rmarte=1.53 #Distancia media al Sol del planeta de destino UA
-mmarte=3.214e-7 #Masa del planeta de destino MS
+rmarte=1.53 #Distancia media al Sol del planeta de destino() UA
+mmarte=3.214e-7 #Masa del planeta de destino() MS
 
 
 vmarte=sqrt(G/rmarte)  #Velocidad de Marte
