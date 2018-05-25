@@ -10,7 +10,7 @@ def f(vx,vy,inicio):
     scene.width = 1400
     scene.height = 700
 
-    scene.title = "Trayectorias óptimas enel Sistema Solar"
+    scene.title = "Trayectorias óptimas en el Sistema Solar"
 
     scene.range = 36
 
@@ -168,20 +168,13 @@ def f(vx,vy,inicio):
         if(tiempo==100000):
             break
         posiciones.sort()
-    if(posiciones[0]<mag(Jupyter.pos)-0.5):
+    if(posiciones[0]<mag(Jupyter.pos)-1):
         print(vx,vy,inicio,mag(Ship.pos-Jupyter.pos))
         return posiciones[0]
     print(vx,vy,inicio,mag(Ship.pos-Jupyter.pos))
     return mag(body.pos-Jupyter.pos)
 
 
-optimo=ag.evolucion(f,-7.5,7.5,50000,ag.poblacion(50,20),ag.poblacion(50,20),
-                    ag.poblacion(50,20),25)
-print(optimo)
-
-optimos=open('optimos.txt', 'w')
-for i in optimo:
-    optimos.write(str(i)+'\n' )
-optimos.close()
-
 """Una sola trayectoria"""
+
+f(0, 8, 0)
