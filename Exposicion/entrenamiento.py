@@ -4,13 +4,13 @@ import numpy as np
 import ag
 
 def f(vx,vy,inicio):
-    if(sqrt(vx**2+vy**2)>8):
+    if(sqrt(vx**2+vy**2)>7.5):
         print(vx,vy,inicio,10000)
         return 10000
     scene.width = 1400
     scene.height = 700
 
-    scene.title = "Trayectorias óptimas enel Sistema Solar"
+    scene.title = "Trayectorias óptimas en el Sistema Solar"
 
     scene.range = 36
 
@@ -152,9 +152,9 @@ def f(vx,vy,inicio):
                          Neptune.mass*DN/mag(DN)**3)
                 body.pos += body.v*dt + 0.5*as1*dt*dt
                 body.v += as1*dt
-                if(mag(body.pos-Jupyter.pos)<0.05):
-                    print(vx,vy,inicio,mag(Ship.pos-Jupyter.pos))
-                    return mag(body.pos-Jupyter.pos)
+                if(mag(body.pos-Mars.pos)<0.01):
+                    print(vx,vy,inicio,mag(Ship.pos-Mars.pos))
+                    return mag(body.pos-Mars.pos)
                 if(mag(body.pos-Sun.pos)<0.5):
                     print(vx,vy,inicio,5000)
                     return 5000
@@ -163,20 +163,20 @@ def f(vx,vy,inicio):
                 a1 = -G*Sun.mass*distance/mag(distance)**3
                 body.pos += body.v*dt + 0.5*a1*dt*dt
                 body.v += a1*dt
-        posiciones.append(mag(Ship.pos-Jupyter.pos))
+        posiciones.append(mag(Ship.pos-Mars.pos))
         tiempo+=1
-        if(tiempo==100000):
+        if(tiempo==50000):
             break
         posiciones.sort()
-    if(posiciones[0]<mag(Jupyter.pos)-0.5):
-        print(vx,vy,inicio,mag(Ship.pos-Jupyter.pos))
+    if(posiciones[0]<mag(Ship.pos-Mars.pos)-0.2):
+        print(vx,vy,inicio,mag(Ship.pos-Mars.pos))
         return posiciones[0]
-    print(vx,vy,inicio,mag(Ship.pos-Jupyter.pos))
-    return mag(body.pos-Jupyter.pos)
+    print(vx,vy,inicio,mag(Ship.pos-Mars.pos))
+    return mag(Ship.pos-Mars.pos)
 
 
-optimo=ag.evolucion(f,-7.5,7.5,50000,ag.poblacion(50,20),ag.poblacion(50,20),
-                    ag.poblacion(50,20),25)
+optimo=ag.evolucion(f,-7.5,7.5,25000,ag.poblacion(100,20),ag.poblacion(100,20),
+                    ag.poblacion(100,20),25)
 print(optimo)
 
 optimos=open('optimos.txt', 'w')

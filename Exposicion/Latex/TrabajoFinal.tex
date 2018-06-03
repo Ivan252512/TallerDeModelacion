@@ -20,7 +20,7 @@
 \author{C. Iván Pineda S.\textsuperscript{1} }
 \title{Uso de algoritmos genéticos para encontrar la ruta óptima en un viaje interplanetario.\\ Taller de Modelación Numérica}
 \date {\textit{\textsuperscript{1}Universidad Nacional Autónoma de México}
-\\ 17 de Abril de 2017}
+\\ 29 de mayo de 2018}
 
 \begin{document}
 \maketitle
@@ -218,7 +218,45 @@ Los pasos que se llevan a cabo son los siguientes:
 
 Se utilizó python para la elaboración de los algoritmos, la libreria de math y numpy para el desarrollo matemático, random para generar números aleatorios y Visual Python para el modelo visual, el código se puede revisar en \url{https://github.com/Ivan252512/TallerDeModelacion/tree/master/Exposicion}.
 
+Para todos los destinos los datos de entrada para $v_x$ y $v_y$ fueron asignados dentro del intervalo [-7.5 UA/YR, 7.5 UA/YR] o [-128 000 km/hr, 128 000 km/hr], las iteraciones necesarias para encontrar trayectorias que lleguen al destino son menores  para los planetas interiores, para Urano y Neptuno el programa tardó días en terminar, mientras que para Marte tarda solo unos minutos. El tiempo al que iniciaba el viaje también dependía del destino.
+
+Además, si $|v_{nave}|\equiv \sqrt{v_x^2+v_y^2+v_z^2}>7.5$ UA/YR con $v_z=0$, la función regresa 5000 UA, esto para evitar trayectorias donde la nave tuviera una rápidez mayor a la del límite propuesto para la simulación, dicho límite 
+es la rápidez tangencial de la Tierra más 21 000 km/hr del cohete, esta rápidez es alcanzable por los cohetes actuales, aunque para las condiciones de despegue no se tomó en cuenta la velocidad relativa entre el cohete y la Tierra, más bien el cohete despega de un punto con las coordenadas de la Tierra, pero se ignora que en primer instancia está viajando a bordo de dicho planeta, es una consideración a tomar en cuenta para mejorar la simulación.
+
+Si la trayectoria del cohete pasa a menos de 0.5 UA del sol, la función regresa 10 000 UA, esto se delimitó debido a que trayectorias tan cercanas al Sol pueden averiar la nave, además, el algoritmo sin esa restricción tendía a regresar órbitas que usaban al Sol como un acelerador debido a su gran masa, siempre pasando muy creca de la estrella.
+
+Cuando en algún punto de toda la trayectoria la nave pasaba a menos de $|\mathbf{r_{destino}}-\mathbf{r_{nave}}|-0.5$ UA de su destino, el algoritmo ordenaba una lista de todas sus posiciones y regresaba el valor con la distancia más pequeña.
+
+Si la nave pasaba a menos de 0.05 UA de su destino, el primer valor que cumpliera dicha condición es el que se regresaba y si ninguna de todas estas condiciones se cumplia, se regresaba el último valor de la distancia entre la nave y el destino.
+
 \section*{Resultados}
+
+\subsection*{Marte}
+
+\subsection*{Júpiter}
+
+El tiempo de inicio estaba dentro del intervalo de [0,50 000] con 10 000 iteraciones por individuo, los tres parametros tenían 50 individuos de 20 bits cada uno y el algoritmo genético se corrió para 25 generaciones, el mejor valor fue en:
+
+\[
+f(-4.232908947857807, 6.565088334167799 29406, 0.04981131056035353) = 0.04981131056035353
+\]
+
+\begin{figure}
+\centering
+  \begin{minipage}{0.3\textwidth}
+    \centering
+    \includegraphics[width=0.885\textwidth]{Jupiter}\\
+    {\small (a)} 
+  \end{minipage}%
+  \hspace{1mm}
+  \begin{minipage}{0.3\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{JupiterFinal}\\
+    {\small (b)} 
+  \end{minipage}
+  \caption{Júpiter: (a) Trayectorias generadas aleatoriamente. (b) Mejor trayectoria.}
+  \label{fig:jupiter}
+\end{figure}
 
 \section*{Conclusiones}
 
