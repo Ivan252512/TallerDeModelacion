@@ -90,7 +90,7 @@ def evolucion(f,a,b,t,individuosx,individuosy,individuost,iteraciones):
                             mejores50[random.randint(0,len(mejores50)-1)][2]),
                       cruza(mejores50[random.randint(0,len(mejores50)-1)][3],
                             mejores50[random.randint(0,len(mejores50)-1)][3])])
-    #Mutación, solo los hijos mutan, escogemos el 10% al azar, 2 veces.
+    #Mutación, solo los hijos mutan, escogemos el 10% al azar, 5 veces.
     for i in range(int(len(hijos)*0.1)):
         for i in range(5):
             randx=random.randint(0,len(hijos)-1)
