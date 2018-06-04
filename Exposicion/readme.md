@@ -1,4 +1,4 @@
-Simulación del Sistema SOlar y sus trayectorias.
+Simulación del sistema solar y sus trayectorias.
 
 Instrucciones
 
