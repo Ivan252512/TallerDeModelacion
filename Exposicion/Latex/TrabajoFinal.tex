@@ -16,11 +16,12 @@
 \usepackage{setspace}
 \spanishdecimal{.}
 \usepackage{hyperref}
+\usepackage{float}
 
 \author{C. Iván Pineda S.\textsuperscript{1} }
 \title{Uso de algoritmos genéticos para encontrar la ruta óptima en un viaje interplanetario.\\ Taller de Modelación Numérica}
 \date {\textit{\textsuperscript{1}Universidad Nacional Autónoma de México}
-\\ 29 de mayo de 2018}
+\\ 5 de junio de 2018}
 
 \begin{document}
 \maketitle
@@ -34,10 +35,10 @@ El objetivo de este trabajo es modelar el sistema solar y su dinámica utilizand
 
 \subsection*{Mecánica newtoniana}
 
-La interacción gravitatoria no relativista de dos cuerpos con masa se describe básicamente con la segunda ley de Newton y con la ley de gravitación universal.
+La interacción gravitatoria no relativista de dos cuerpos con masa se describe básicamente con la segunda ley de Newton y con la ley de gravitación universal \citep{jose2000classical}.
 
 \begin{equation}
- M\dfrac{\partial ^2 \mathbf{r_2}}{\partial t^2}=-G\dfrac{m_1m_2}{|\mathbf{r_{2}}-\mathbf{r_1}|^3}(\mathbf{r_{2}}-\mathbf{r_1})
+ M\dfrac{d ^2 \mathbf{r_2}}{d t^2}=-G\dfrac{m_1m_2}{|\mathbf{r_{2}}-\mathbf{r_1}|^3}(\mathbf{r_{2}}-\mathbf{r_1})
 \end{equation} 
 
 Donde:
@@ -52,30 +53,30 @@ $G=39.4784176 \ AU^3 \ YR^{-2} \ SM^{-1}$, G es la constante de gravitación uni
 $\mathbf{r_n} $ es el vector de posición de cada cuerpo.
 \\
 \\
-Como la masa del Sol comparada con la de los planetas es varios ordenes de magnitud mayor que la de los planetas, podemos decir que $m_s>>m_p$, por lo tanto:
+Como la masa del Sol comparada con la de los planetas es varios ordenes de magnitud mayor, podemos decir que $m_s>>m_p$, por lo tanto:
 \\
 \\
 $M=\dfrac{m_sm_p}{m_s+m_p}=\dfrac{m_sm_p}{m_s}=m_p$, sustituyendo en la ecuación (1).
 
 \begin{equation}
- m_p\dfrac{\partial ^2 \mathbf{r_p}}{\partial t^2}=-G\dfrac{m_sm_p}{|\mathbf{r_{p}}-\mathbf{r_s}|^3}(\mathbf{r_{p}}-\mathbf{r_s}) \Rightarrow \dfrac{\partial ^2 \mathbf{r_p}}{\partial t^2}=-G\dfrac{m_s}{|\mathbf{r_{p}}-\mathbf{r_s}|^3}(\mathbf{r_{p}}-\mathbf{r_s})
+ m_p\dfrac{d ^2 \mathbf{r_p}}{d t^2}=-G\dfrac{m_sm_p}{|\mathbf{r_{p}}-\mathbf{r_s}|^3}(\mathbf{r_{p}}-\mathbf{r_s}) \Rightarrow \dfrac{d ^2 \mathbf{r_p}}{d t^2}=-G\dfrac{m_s}{|\mathbf{r_{p}}-\mathbf{r_s}|^3}(\mathbf{r_{p}}-\mathbf{r_s})
 \end{equation} 
 
 La ecuación (2) determina la dinámica de un planeta con respecto al Sol, para determinar la dinámica de la nave debemos sumar las fuerzas de cada uno de los planetas y del Sol, basándonos en lo que realizamos para obtener la ecuación (2) pero ahora siendo $m_{planetas}>>m_{nave}$ obtenemos:
 
 \begin{equation}
-\dfrac{\partial ^2 \mathbf{r_{nave}}}{\partial t^2}=\sum_{i=1}^{9} -G\dfrac{m_i}{|\mathbf{r_{nave}}-\mathbf{r_i}|^3}(\mathbf{r_{nave}}-\mathbf{r_i})=-G \sum_{i=1}^{9} m_ i\dfrac{\mathbf{r_{nave}}-\mathbf{r_i}}{|\mathbf{r_{nave}}-\mathbf{r_i}|^3}
+\dfrac{d ^2 \mathbf{r_{nave}}}{d t^2}=\sum_{i=1}^{9} -G\dfrac{m_i}{|\mathbf{r_{nave}}-\mathbf{r_i}|^3}(\mathbf{r_{nave}}-\mathbf{r_i})=-G \sum_{i=1}^{9} m_ i\dfrac{\mathbf{r_{nave}}-\mathbf{r_i}}{|\mathbf{r_{nave}}-\mathbf{r_i}|^3}
 \end{equation}
 
 Donde $m_i$ y $r_i$ representan la masa y posición de cada uno de los planetas y el Sol.
 
 Para obtener la velocidad debemos integrar las ecuaciones (2) y (3).
 \begin{equation}
-\mathbf{v_{planeta}}\equiv\int_{0}^{t} \dfrac{\partial ^2 \mathbf{r_p}}{\partial t^2} dt=-G \int_{0}^{t} \dfrac{m_s}{|\mathbf{r_{p}}-\mathbf{r_s}|^3}(\mathbf{r_{p}}-\mathbf{r_s}) dt
+\mathbf{v_{planeta}}\equiv\int_{0}^{t} \dfrac{d ^2 \mathbf{r_p}}{d t^2} dt=-G \int_{0}^{t} \dfrac{m_s}{|\mathbf{r_{p}}-\mathbf{r_s}|^3}(\mathbf{r_{p}}-\mathbf{r_s}) dt
 \end{equation}
 
 \begin{equation}
-\mathbf{v_{nave}}\equiv\int_{0}^{t} \dfrac{\partial ^2 \mathbf{r_{nave}}}{\partial t^2} dt=-G \int_{0}^{t} \sum_{i=1}^{9} m_ i\dfrac{\mathbf{r_{nave}}-\mathbf{r_i}}{|\mathbf{r_{nave}}-\mathbf{r_i}|^3} dt
+\mathbf{v_{nave}}\equiv\int_{0}^{t} \dfrac{d ^2 \mathbf{r_{nave}}}{d t^2} dt=-G \int_{0}^{t} \sum_{i=1}^{9} m_ i\dfrac{\mathbf{r_{nave}}-\mathbf{r_i}}{|\mathbf{r_{nave}}-\mathbf{r_i}|^3} dt
 \end{equation}
 
 Como el objetivo del curso es usar métodos numéricos, vamos a obtener cada punto siguiente utilizando el método de Euler, entonces la forma en que vamos a utilizar las ecuaciones (4) y (5) es:
@@ -96,13 +97,13 @@ Para obtener la posición actual en función de la posición anterior utilizamos
 Por lo tanto la velocidad es:
 
 \begin{equation}
-\mathbf{v_{nave}}\equiv \dfrac{\partial  \mathbf{r_{nave}}}{\partial t} \equiv \int_{0}^{t} \dfrac{\partial ^2 \mathbf{r_{nave}}}{\partial t^2} dt= \int_{0}^{t} \mathbf{a} dt
+\mathbf{v_{nave}}\equiv \dfrac{d  \mathbf{r_{nave}}}{d t} \equiv \int_{0}^{t} \dfrac{d ^2 \mathbf{r_{nave}}}{d t^2} dt= \int_{0}^{t} \mathbf{a} dt
 \end{equation}
 
 Resolviendo la ecuación (8):
 
 \[
-\dfrac{\partial  \mathbf{r_{nave}}}{\partial t} \mid_{0}^{t}= \mathbf{a}t \mid_{0}^{t} \ \Rightarrow \mathbf{v_{nave}}(t)-\mathbf{v_{nave}}(0) = \mathbf{a}t - \mathbf{a}0
+\dfrac{d  \mathbf{r_{nave}}}{d t} \mid_{0}^{t}= \mathbf{a}t \mid_{0}^{t} \ \Rightarrow \mathbf{v_{nave}}(t)-\mathbf{v_{nave}}(0) = \mathbf{a}t - \mathbf{a}0
 \]
 
 Tomando a $\mathbf{v_{nave}}(0)=\mathbf{v_{nave_0}}=cte$, tenemos que:
@@ -111,10 +112,10 @@ Tomando a $\mathbf{v_{nave}}(0)=\mathbf{v_{nave_0}}=cte$, tenemos que:
 \mathbf{v_{nave}}(t)=\mathbf{v_{nave_0}} + \mathbf{a}t
 \end{equation}
 
-La ecuación (9) también se puede escribir de la forma $\dfrac{\partial  \mathbf{r_{nave}}(t)}{\partial t}=\mathbf{v_{nave_0}} + \mathbf{a}t$, la integral de dicha ecuación con respecto al tiempo nos dará la ecuación de movimiento para la nave.
+La ecuación (9) también se puede escribir de la forma $\dfrac{d  \mathbf{r_{nave}}(t)}{d t}=\mathbf{v_{nave_0}} + \mathbf{a}t$, la integral de dicha ecuación con respecto al tiempo nos dará la ecuación de movimiento para la nave.
 
 \begin{equation}
- \int_{0}^{t} \dfrac{\partial  \mathbf{r_{nave}}(t)}{\partial t} dt= \int_{0}^{t} [\mathbf{v_{nave_0}} + \mathbf{a}t] dt
+ \int_{0}^{t} \dfrac{d  \mathbf{r_{nave}}(t)}{d t} dt= \int_{0}^{t} [\mathbf{v_{nave_0}} + \mathbf{a}t] dt
 \end{equation}
 
 Resolviendo la ecuación (10):
@@ -150,7 +151,7 @@ Para modelar la dinámica de nuestro sistema solo usaremos las ecuaciones (6), (
 
 \subsection*{Algoritmos genéticos}
 
-Los algoritmos genéticos son una heurística de optimización que se utiliza para encontrar los máximos y mínimos de una función sin necesidad de usar derivadas, se basan en la selección natural.
+Los algoritmos genéticos son un método heurístico de optimización que se utiliza para encontrar los máximos y mínimos de una función sin necesidad de usar derivadas, se basan en la selección natural \citep{gestal2010introduccion}.
 
 \subsubsection*{Codificación binaria}
 
@@ -158,7 +159,7 @@ En la naturaleza la información necesaria para codificar las proteínas que con
 
 Para nuestro algoritmo utilizaremos una codificación en números binarios, es decir, una cadena de solo 0 y 1 que posteriormente será traducida a un número decimal que se encuentre dentro de un intervalo dado.
 
-En un inicio se crearan un número determinado de cadenas de binarios que será nuestra población, que tendrán un número determinado de bits al que llamaremos $n$ y la distribución de 0 y 1 será aleatoria.
+En un inicio se crearán un número determinado de cadenas de binarios que será nuestra población, que tendrán un número determinado de bits al que llamaremos $n$ y la distribución de 0 y 1 será aleatoria.
 
 Primero convertimos la cadena binaria a decimal como en el siguiente ejemplo:
 
@@ -216,6 +217,9 @@ Los pasos que se llevan a cabo son los siguientes:
 
 \section*{Métodos}
 
+Nos basamos en un artículo sobre el Diseño de un programa en python para la enseñanza de la transferencia de
+órbita de Hohmann \citep{mendez2016diseno}.
+
 Se utilizó python para la elaboración de los algoritmos, la libreria de math y numpy para el desarrollo matemático, random para generar números aleatorios y Visual Python para el modelo visual, el código se puede revisar en \url{https://github.com/Ivan252512/TallerDeModelacion/tree/master/Exposicion}.
 
 Para todos los destinos los datos de entrada para $v_x$ y $v_y$ fueron asignados dentro del intervalo [-7.5 UA/YR, 7.5 UA/YR] o [-128 000 km/hr, 128 000 km/hr], las iteraciones necesarias para encontrar trayectorias que lleguen al destino son menores  para los planetas interiores, para Urano y Neptuno el programa tardó días en terminar, mientras que para Marte tarda solo unos minutos. El tiempo al que iniciaba el viaje también dependía del destino.
@@ -225,7 +229,7 @@ es la rápidez tangencial de la Tierra más 21 000 km/hr del cohete, esta rápid
 
 Si la trayectoria del cohete pasa a menos de 0.5 UA del sol, la función regresa 10 000 UA, esto se delimitó debido a que trayectorias tan cercanas al Sol pueden averiar la nave, además, el algoritmo sin esa restricción tendía a regresar órbitas que usaban al Sol como un acelerador debido a su gran masa, siempre pasando muy creca de la estrella.
 
-Cuando en algún punto de toda la trayectoria la nave pasaba a menos de $|\mathbf{r_{destino}}-\mathbf{r_{nave}}|-0.5$ UA de su destino, el algoritmo ordenaba una lista de todas sus posiciones y regresaba el valor con la distancia más pequeña.
+Cuando en algún punto de toda la trayectoria la nave pasaba a menos de $|\mathbf{r_{destino}}-\mathbf{r_{nave}}|-0.1$ UA de su destino, el algoritmo ordenaba una lista de todas sus posiciones y regresaba el valor con la distancia más pequeña.
 
 Si la nave pasaba a menos de 0.05 UA de su destino, el primer valor que cumpliera dicha condición es el que se regresaba y si ninguna de todas estas condiciones se cumplia, se regresaba el último valor de la distancia entre la nave y el destino.
 
@@ -233,15 +237,40 @@ Si la nave pasaba a menos de 0.05 UA de su destino, el primer valor que cumplier
 
 \subsection*{Marte}
 
+El tiempo de inicio estaba dentro del intervalo de [0,2 500] con 10 000 iteraciones por individuo, los tres parametros tenían 100 individuos de 20 bits cada uno y el algoritmo genético se corrió para 25 generaciones, el mejor valor fue en (fig. \ref{fig:marte}):
+
+\[
+f(6.8707317073170735, 0.6998998641012797, 1096.0) = 0.04745463993063615
+\]
+
+
+\begin{figure}[H]
+\centering
+  \begin{minipage}{0.3\textwidth}
+    \centering
+    \includegraphics[width=0.885\textwidth]{marte}\\
+    {\small (a)} 
+  \end{minipage}%
+  \hspace{1mm}
+  \begin{minipage}{0.3\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{marteop}\\
+    {\small (b)} 
+  \end{minipage}
+  \caption{Marte: (a) Trayectorias generadas aleatoriamente. (b) Mejor trayectoria.}
+  \label{fig:marte}
+\end{figure}
+
+
 \subsection*{Júpiter}
 
-El tiempo de inicio estaba dentro del intervalo de [0,50 000] con 10 000 iteraciones por individuo, los tres parametros tenían 50 individuos de 20 bits cada uno y el algoritmo genético se corrió para 25 generaciones, el mejor valor fue en:
+El tiempo de inicio estaba dentro del intervalo de [0,50 000] con 100 000 iteraciones por individuo, los tres parametros tenían 50 individuos de 20 bits cada uno y el algoritmo genético se corrió para 25 generaciones, el mejor valor fue en (fig. \ref{fig:jupiter}):
 
 \[
 f(-4.232908947857807, 6.565088334167799 29406, 0.04981131056035353) = 0.04981131056035353
 \]
 
-\begin{figure}
+\begin{figure}[H]
 \centering
   \begin{minipage}{0.3\textwidth}
     \centering
@@ -260,7 +289,13 @@ f(-4.232908947857807, 6.565088334167799 29406, 0.04981131056035353) = 0.04981131
 
 \section*{Conclusiones}
 
+El algoritmo genético resultó efectivo y encontramos trayectorias que llevaban a la nave a su destino, aun queda mucho por mejorar en el modelo, principalmente agregar a la nave una velocidad inicial que también tome en cuenta la velocidad de traslación y rotación de la Tierra, tomar en cuentas los momentos angulares y posibles torcas del sistema y ya si se quiere ser mucho más específico más cuerpos celestes y la interacción con el viento solar.
 
+En definitiva, la simulación tiene más potencial.
+
+
+\bibliography{TrabajoFinal}
+\bibliographystyle{apa}
 
 \end{document}
 

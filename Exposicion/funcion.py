@@ -7,7 +7,7 @@ from vpython import *
 def f(vx,vy,inicio):
     #Condición de penalización para que la rapidez de la nave no supere el
     #límite impuesto.
-    if(sqrt(vx**2+vy**2)>8):
+    if(sqrt(vx**2+vy**2)>7.5):
         #Imprime los valores a evaluar y su resultado.
         print(vx,vy,inicio,10000)
         return 10000
