@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.26)  3 JUN 2018 22:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.26)  4 JUN 2018 20:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -916,49 +916,49 @@ Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 195.
  [4]
 Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
 Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 231.
  [5]
-<marte.png, id=79, 593.21625pt x 457.71pt>
+<marte.png, id=80, 593.21625pt x 457.71pt>
 File: marte.png Graphic file (type png)
  <use marte.png>
 Package pdftex.def Info: marte.png used on input line 251.
 (pdftex.def)             Requested size: 132.87901pt x 102.52634pt.
 
-<marteop.png, id=80, 395.4775pt x 382.42876pt>
+<marteop.png, id=81, 395.4775pt x 382.42876pt>
 File: marteop.png Graphic file (type png)
  <use marteop.png>
 Package pdftex.def Info: marteop.png used on input line 257.
 (pdftex.def)             Requested size: 120.11783pt x 116.15334pt.
 
-<Jupiter.png, id=82, 729.72626pt x 612.2875pt>
+<Jupiter.png, id=83, 729.72626pt x 612.2875pt>
 File: Jupiter.png Graphic file (type png)
  <use Jupiter.png>
 Package pdftex.def Info: Jupiter.png used on input line 277.
 (pdftex.def)             Requested size: 132.87901pt x 111.48694pt.
 
-<JupiterFinal.png, id=83, 187.70125pt x 174.6525pt>
+<JupiterFinal.png, id=84, 187.70125pt x 174.6525pt>
 File: JupiterFinal.png Graphic file (type png)
  <use JupiterFinal.png>
 Package pdftex.def Info: JupiterFinal.png used on input line 283.
@@ -1063,10 +1063,10 @@ xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on TrabajoFinal.pdf (7 pages, 345982 bytes).
+Output written on TrabajoFinal.pdf (7 pages, 346890 bytes).
 PDF statistics:
- 169 PDF objects out of 1000 (max. 8388607)
- 136 compressed objects within 2 object streams
+ 170 PDF objects out of 1000 (max. 8388607)
+ 137 compressed objects within 2 object streams
  42 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
