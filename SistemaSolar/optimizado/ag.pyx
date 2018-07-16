@@ -1,5 +1,4 @@
 import numpy as np
-from math import *
 import random
 import threading
 
@@ -82,15 +81,17 @@ def evolucion(f,a,b,t,individuosx,individuosy,individuost,iteraciones):
         return "Las poblaciones iniciales deben tener la misma longitud."
     #Selección
 
-    for i in range(len(individuosx)):
-        exec("hilo_"+str(i)+"=threading.Thread(target=evalInd,"+
-             "args=(f,a,b,t,individuosx,individuosy,individuost,i))")
+    hilos = []
 
     for i in range(len(individuosx)):
-        exec("hilo_"+str(i)+".start()")
+        hilos.append(threading.Thread(target=evalInd,
+                     args=(f,a,b,t,individuosx,individuosy,individuost,i)))
 
-    for i in range(len(individuosx)):
-        exec("hilo_"+str(i)+".join()")
+    for i in hilos:
+        i.start()
+
+    for i in hilos:
+        i.join()
 
     evaluacion.sort()
     mejores50=evaluacion[:int(0.5*len(evaluacion))]
