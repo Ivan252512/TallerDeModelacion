@@ -134,7 +134,7 @@ def f(vx,vy,inicio):
     posiciones=[]
     #Primer distancia Nave-destino, se usa abajo, se le resta un poco a
     #conveniencia, para lograr que las trayectorias se encaminen al destino.
-    distOriginal=mag(Ship.pos-Mars.pos)-0.1
+    distOriginal=mag(Ship.pos-Neptune.pos)-0.1
     while True:
         #Rapidez a la que se quiere visualizar cada iteración, no necesario.
         #rate(1000000000000)
@@ -173,13 +173,13 @@ def f(vx,vy,inicio):
                 body.pos += body.v*dt + 0.5*as1*dt*dt
                 body.v += as1*dt
                 """A partir de aquí se define el destino (Marte por default),
-                si se quiere cambiar el destino solo cambie Mars.pos por otro
+                si se quiere cambiar el destino solo cambie Neptune.pos por otro
                 planeta (e.g para Júpiter sería Jupyter.pos)"""
                 #Si la distance nave-destino es menor que 0.05 UA, se sale del
                 #while y regresa el valor más cercano.
-                if(mag(Ship.pos-Mars.pos)<0.05):
-                    print(vx,vy,inicio,mag(Ship.pos-Mars.pos))
-                    return mag(Ship.pos-Mars.pos)
+                if(mag(Ship.pos-Neptune.pos)<0.05):
+                    print(vx,vy,inicio,mag(Ship.pos-Neptune.pos))
+                    return mag(Ship.pos-Neptune.pos)
                 #Si la nave se acerca mucho al Sol, se sale del while y regresa
                 #un valor de penalización.
                 if(mag(Ship.pos-Sun.pos)<0.5):
@@ -196,18 +196,18 @@ def f(vx,vy,inicio):
                 body.pos += body.v*dt + 0.5*a1*dt*dt
                 body.v += a1*dt
         #Hacemos una lista con todas las distancias Nave-Destino.
-        posiciones.append(mag(Ship.pos-Mars.pos))
+        posiciones.append(mag(Ship.pos-Neptune.pos))
         #Contador que se ocupa para saber cuando iniciar el viaje de la nave.
         tiempo+=1
         #Condición de finalización del while, evitar un ciclo infinito.
-        if(tiempo==10000):
+        if(tiempo==100000):
             break
         #Acomodamos de menor a mayor las distancias nave-destino.
         posiciones.sort()
         #Si la menor distancia a la que la nave estuvo del destino es menor
         #que la distancia original(Tierra-destino), de la cual sale la nave
     if  posiciones[0]<distOriginal:
-        print(vx,vy,inicio,mag(Ship.pos-Mars.pos))
+        print(vx,vy,inicio,mag(Ship.pos-Neptune.pos))
         return posiciones[0]
-    print(vx,vy,inicio,mag(Ship.pos-Mars.pos))
-    return mag(ship.pos-Mars.pos)
+    print(vx,vy,inicio,mag(Ship.pos-Neptune.pos))
+    return mag(ship.pos-Neptune.pos)
