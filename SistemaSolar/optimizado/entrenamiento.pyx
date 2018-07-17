@@ -18,8 +18,8 @@ regresa"""
 #ag.poblacion(100,20) genera una población de 100 cadenas binarias con 20 bits.
 #25 son las generaciones.
 
-optimo=ag.evolucion(f,-5, 5, 50000,ag.poblacion(100,20),ag.poblacion(100,20),
-                    ag.poblacion(100,20),25)
+optimo=ag.evolucion(-6.5, 6.5, 100000, ag.poblacion(1000,25),
+                    ag.poblacion(1000,25), ag.poblacion(1000,25), 30)
 print(optimo)
 #Guardamos en un .txt
 optimos=open('optimos.txt', 'w')

@@ -159,7 +159,7 @@ def f(vx,vy,inicio):
         #Contador que se ocupa para saber cuando iniciar el viaje de la nave.
         tiempo+=1
         #Condición de finalización del while, evitar un ciclo infinito.
-        if(tiempo==100000):
+        if(tiempo==500000):
             break
         #Acomodamos de menor a mayor las distancias nave-destino.
         posiciones.sort()

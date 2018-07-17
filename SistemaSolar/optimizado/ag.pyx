@@ -1,6 +1,8 @@
 import numpy as np
 import random
 import threading
+from funcionOptimizada import f
+import multiprocessing
 
 """Algoritmo genético"""
 
@@ -63,35 +65,29 @@ def poblacion(cantidad,bitsDeCadaIndividuo):
    lista con individuos(cadenas de binarios) a evaluar, selecciona al 50% más
    apto, los reproduce y la descendencia remplaza al 50% menos apto"""
 
+def eval(x):
+    return [f(x[0],x[1],x[2]),x[3],x[4],x[5]]
 
-evaluacion=[]
-def evalInd(f,a,b,t,individuosx,individuosy,individuost,i):
-    global evaluacion
-    evaluacion.append([f(binToDec(individuosx[i],a,b),
-                         binToDec(individuosy[i],a,b),
-                         int(binToDec(individuost[i],0,t))),
-                         individuosx[i],
-                         individuosy[i],
-                         individuost[i]])
-
-def evolucion(f,a,b,t,individuosx,individuosy,individuost,iteraciones):
+def evolucion(a,b,t,individuosx,individuosy,individuost,iteraciones):
     global evaluacion
     print("---------------------------------------------------------")
     if len(individuosx)!=len(individuosy)!=len(individuost):
         return "Las poblaciones iniciales deben tener la misma longitud."
     #Selección
 
-    hilos = []
+    aEvaluar = []
 
     for i in range(len(individuosx)):
-        hilos.append(threading.Thread(target=evalInd,
-                     args=(f,a,b,t,individuosx,individuosy,individuost,i)))
+        aEvaluar.append([binToDec(individuosx[i],a,b),
+                         binToDec(individuosy[i],a,b),
+                         int(binToDec(individuost[i],0,t)),
+                         individuosx[i],
+                         individuosy[i],
+                         individuost[i]])
 
-    for i in hilos:
-        i.start()
+    p = multiprocessing.Pool(5)
+    evaluacion = p.map(eval, aEvaluar)
 
-    for i in hilos:
-        i.join()
 
     evaluacion.sort()
     mejores50=evaluacion[:int(0.5*len(evaluacion))]
@@ -129,8 +125,6 @@ def evolucion(f,a,b,t,individuosx,individuosy,individuost,iteraciones):
         for i in nuevaGeneracion:
             decimales.append([binToDec(i[0],a,b),binToDec(i[1],a,b),
                               int(binToDec(i[2],0,t))])
-        evaluacion=[]
         return decimales
     else:
-        evaluacion=[]
-        return  evolucion(f,a,b,t,genx,geny,gent,iteraciones-1)
+        return  evolucion(a,b,t,genx,geny,gent,iteraciones-1)
