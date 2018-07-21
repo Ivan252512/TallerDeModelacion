@@ -56,13 +56,7 @@ class celestialBody:
                     self.__vel.all() == obj.vel.all())
         return False
 
-    """Movimiento"""
+    """Movimiento método de Euler"""
     def mov(self, acel, dt):
-        if (isinstance(acel, np.ndarray) and len(acel)==3 and
-            isinstance(dt, float) and dt>0):
-            self.__pos += self.__vel*dt + 0.5*acel*dt*dt
-            self.__vel += acel*dt
-        else:
-            raise TypeError("El tiempo debe ser flotante (float)"
-                            + " y la aceleración un numpy.ndarray "
-                            + "de longitud 3.")
+        self.__pos += self.__vel*dt + acel*dt*dt
+        self.__vel += acel*dt

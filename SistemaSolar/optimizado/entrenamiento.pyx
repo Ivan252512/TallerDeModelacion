@@ -5,7 +5,6 @@ algoritmos genéticos para encontrar las rutas que llevaras a la nave más cerca
 de su destino."""
 
 #Función de evaluación
-from funcionOptimizada import f
 #ag es el script donde están las funciones correspondientes a algoritmos
 #genéticos.
 import ag
@@ -18,8 +17,8 @@ regresa"""
 #ag.poblacion(100,20) genera una población de 100 cadenas binarias con 20 bits.
 #25 son las generaciones.
 
-optimo=ag.evolucion(-6.5, 6.5, 100000, ag.poblacion(1000,25),
-                    ag.poblacion(1000,25), ag.poblacion(1000,25), 30)
+optimo=ag.evolucion(-7.5, 7.5, 50000, ag.poblacion(50,15),
+                    ag.poblacion(50,15), ag.poblacion(50,15), 30)
 print(optimo)
 #Guardamos en un .txt
 optimos=open('optimos.txt', 'w')

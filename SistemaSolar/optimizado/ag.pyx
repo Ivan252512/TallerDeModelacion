@@ -68,8 +68,10 @@ def poblacion(cantidad,bitsDeCadaIndividuo):
 def eval(x):
     return [f(x[0],x[1],x[2]),x[3],x[4],x[5]]
 
+
+evaluaciones = []
 def evolucion(a,b,t,individuosx,individuosy,individuost,iteraciones):
-    global evaluacion
+    global evaluaciones
     print("---------------------------------------------------------")
     if len(individuosx)!=len(individuosy)!=len(individuost):
         return "Las poblaciones iniciales deben tener la misma longitud."
@@ -103,7 +105,7 @@ def evolucion(a,b,t,individuosx,individuosy,individuost,iteraciones):
                       cruza(mejores50[random.randint(0,len(mejores50)-1)][3],
                             mejores50[random.randint(0,len(mejores50)-1)][3])])
     #Mutación, solo los hijos mutan, escogemos el 10% al azar, 5 veces.
-    for i in range(int(len(hijos)*0.1)):
+    for i in range(int(len(hijos)*0.2)):
         for i in range(5):
             randx=random.randint(0,len(hijos)-1)
             hijos[randx][0]=mutacion(hijos[randx][0])
@@ -120,11 +122,11 @@ def evolucion(a,b,t,individuosx,individuosy,individuost,iteraciones):
         genx.append(nuevaGeneracion[i][0])
         geny.append(nuevaGeneracion[i][1])
         gent.append(nuevaGeneracion[i][2])
+
+    for i in evaluacion:
+        evaluaciones.append([binToDec(i[1],a,b),binToDec(i[2],a,b),
+                             binToDec(i[3],a,b),i[0]])
     if(iteraciones==0):
-        decimales=[]
-        for i in nuevaGeneracion:
-            decimales.append([binToDec(i[0],a,b),binToDec(i[1],a,b),
-                              int(binToDec(i[2],0,t))])
-        return decimales
+        return evaluaciones
     else:
         return  evolucion(a,b,t,genx,geny,gent,iteraciones-1)
