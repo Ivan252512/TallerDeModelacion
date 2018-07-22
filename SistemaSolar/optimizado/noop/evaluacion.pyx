@@ -7,9 +7,6 @@ de su destino."""
 #Programa para evaluar la ultima generación obtenida en el .txt que
 #produce el el script de entrenamiento.
 
-#ag es el script donde están las funciones correspondientes a algoritmos
-#genéticos.
-import ag
 #Importamos la función de evaluación de entrenamiento.
 from funcion import f
 

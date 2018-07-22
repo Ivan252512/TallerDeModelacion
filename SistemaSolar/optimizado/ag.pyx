@@ -87,7 +87,7 @@ def evolucion(a,b,t,individuosx,individuosy,individuost,iteraciones):
                          individuosy[i],
                          individuost[i]])
 
-    p = multiprocessing.Pool(5)
+    p = multiprocessing.Pool(4)
     evaluacion = p.map(eval, aEvaluar)
 
 
@@ -123,10 +123,11 @@ def evolucion(a,b,t,individuosx,individuosy,individuost,iteraciones):
         geny.append(nuevaGeneracion[i][1])
         gent.append(nuevaGeneracion[i][2])
 
-    for i in evaluacion:
-        evaluaciones.append([binToDec(i[1],a,b),binToDec(i[2],a,b),
-                             binToDec(i[3],a,b),i[0]])
     if(iteraciones==0):
-        return evaluaciones
+        decimales=[]
+        for i in nuevaGeneracion:
+            decimales.append([binToDec(i[0],a,b),binToDec(i[1],a,b),
+                              int(binToDec(i[2],0,t))])
+        return decimales
     else:
         return  evolucion(a,b,t,genx,geny,gent,iteraciones-1)

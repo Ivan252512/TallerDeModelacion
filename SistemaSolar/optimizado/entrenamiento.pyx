@@ -16,12 +16,15 @@ regresa"""
 #2500 limite para el tiempo de inicio de la nave, debe ser menor a 10000.
 #ag.poblacion(100,20) genera una población de 100 cadenas binarias con 20 bits.
 #25 son las generaciones.
+#Unidad astronómica en KM para convertir km/hr en UA/año
+UAkm = 1.496e+8 #km
+vMaxCohete = (11000/UAkm)
 
-optimo=ag.evolucion(-7.5, 7.5, 50000, ag.poblacion(50,15),
-                    ag.poblacion(50,15), ag.poblacion(50,15), 30)
+optimo=ag.evolucion(-10, 10, 5000, ag.poblacion(10,15),
+                    ag.poblacion(10,15), ag.poblacion(10,15), 5)
 print(optimo)
 #Guardamos en un .txt
-optimos=open('optimos.txt', 'w')
+optimos=open('noop/optimos.txt', 'w')
 for i in optimo:
     optimos.write(str(i)+'\n' )
 optimos.close()

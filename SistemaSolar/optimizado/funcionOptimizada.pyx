@@ -13,7 +13,7 @@ sca = np.sin(np.pi/2+ANG)
 cca = np.cos(np.pi/2+ANG)
 
 #Diferencial a usar
-dt=0.00000190258
+dt=0.00002853881 #15 min
 
 """Mercurio"""
 rmerc=0.38          #radio
@@ -152,8 +152,9 @@ Neptune = cc.celestialBody(mnep, 0.1, np.array([rnep*ca,rnep*sa,0]),
 def f(vx,vy,inicio):
     global Sun, Mercury,Venus,Earth,Luna,Mars,Io,Europa,Ganimedes,Calisto
     global Jupyter,Titan,Saturn,Uranus,Neptune, dt, Msol
+
     destino = Mars #Destino, se puede cambiar a cualquier planeta o Satélite.
-    tiempoLimite = 100000 #Número máximo de iteraciones.
+    tiempoLimite = 200000 #Número máximo de iteraciones.
     #Condición de penalización para que la rapidez de la nave no supere el
     #límite impuesto.
     if(np.sqrt(vx**2+vy**2)>7.5):
@@ -162,6 +163,7 @@ def f(vx,vy,inicio):
         return 10000
 
     tiempo=0
+    posiciones=[]
     movBody = [Sun,Mercury,Venus,Luna,Earth,Mars,Io,Europa,Ganimedes,
                   Calisto,Jupyter,Titan,Saturn,Uranus,Neptune]
     while True:
@@ -170,17 +172,16 @@ def f(vx,vy,inicio):
         if tiempo==inicio:
             #cambiamos la posición inicial de la nave a la actual de la Tierra.
             Ship = cc.celestialBody(50000/Msol, 0.00001, Earth.pos,
-                                    np.array([vx, vy, 0.0]))
+                                    Earth.vel+np.array([vx, vy, 0.0]))
             movBody.append(Ship)
-            posiciones=[]
             #Primer distancia Nave-destino, se usa abajo, se le resta un poco a
             #conveniencia, para lograr que las trayectorias se encaminen al
             #destino.
-            distOriginal=np.linalg.norm(Earth.pos-destino.pos)-0.1
+            distOriginal=np.linalg.norm(Ship.pos-destino.pos)-0.1
         #Movemos cada uno de los cuerpos en el sistema.
         for body in movBody:
             #Aceleración del planeta
-            body.mov(acel(body.pos[:]),dt)
+            body.mov(acel(body.pos),dt)
             if tiempo>=inicio:
                 #Si la distancia nave-destino es menor que 0.05 UA, se sale del
                 #while y regresa el valor más cercano.
