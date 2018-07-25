@@ -1,2 +1,2 @@
 import pyximport; pyximport.install()
-import euler, evaluacion,funcion
+import evaluacion,funcion

@@ -15,7 +15,7 @@ dospi=2*pi
 pimedios=pi/2
 
 #Diferencial a usar
-dt=0.00002853881 #15 min
+dt=3.17097889e-8 #1 seg
 
 """Mercurio"""
 rmerc=0.38          #radio
@@ -187,12 +187,14 @@ Neptune = sphere(pos=vector(rnep*ca,rnep*sa,0),
                  radius=24622/UAkm, color=color.blue,make_trail=True, interval=10)
 Neptune.mass = mnep
 Neptune.v = vector(vnep*cca, vnep*sca, 0)
+movBody = ([Sun,Mercury,Venus,Luna,Earth,Mars,Io,Europa,Ganimedes,
+              Calisto,Jupyter,Titan,Saturn,Uranus,Neptune])
 
 """Es la función principal, descripción en el archivo .pdf adjunto"""
 def f(vx,vy,inicio):
-    global Sun, Mercury,Venus,Earth,Luna,Mars,Io,Europa,Ganimedes,Calisto
-    global Jupyter,Titan,Saturn,Uranus,Neptune, SaturnRing
+    global movBody, dt
     print(vx,vy,inicio)
+
     #Herramientas de visual python para la visualización
     scene.width = 1400
     scene.height = 700
@@ -201,11 +203,9 @@ def f(vx,vy,inicio):
 
     tiempo=0
     contimp=0
-    posiciones=[]
+    ccel = [Sun,Mercury,Venus,Earth,Mars,Jupyter,Saturn,Uranus,Neptune]
     #Primer distancia Nave-destino, se usa abajo, se le resta un poco a
     #conveniencia, para lograr que las trayectorias se encaminen al destino.
-    movBody = ([Sun,Mercury,Venus,Luna,Earth,Mars,Io,Europa,Ganimedes,
-                  Calisto,Jupyter,Titan,Saturn,Uranus,Neptune])
     while True:
         #Rapidez a la que se quiere visualizar cada iteración, no necesario.
         #Tiempo inicial del viaje de la nave, es decir, la nave puede iniciar
@@ -213,16 +213,17 @@ def f(vx,vy,inicio):
         #Movemos cada uno de los cuerpos en el sistema.
         if tiempo==inicio:
             #cambiamos la posición inicial de la nave a la actual de la Tierra.
-            Ship = sphere(pos=Earth.pos, radius=0.00001,
+            Ship = sphere(pos=Earth.pos+vector(0,Earth.radius,0),
+                          radius=0.1/UAkm,
                           color=color.orange,make_trail=True, interval=10)
-            Ship.mass = 50000/Msol
-            Ship.v = vector(0,0,0) # Earth.v + vector(vx, vy, 0.0)
+            Ship.mass = 546700/Msol
+            Ship.v = Earth.v + vector(vx, vy, 0.0)
             movBody.append(Ship)
+            ccel.append(Ship)
         #Función para mover todos los cuerpos
         computeForces(movBody)
         centrar = []
         j=0
-        ccel = [Sun,Mercury,Venus,Earth,Mars,Jupyter,Saturn,Uranus,Neptune]
         for body in ccel:
                 centrar.append([mag(body.pos-scene.mouse.pos),j])
                 j+=1
@@ -237,54 +238,49 @@ def f(vx,vy,inicio):
 
 
 """Mover cuerpos"""
+global SaturnRing, dt, Saturn, Earth
 def computeForces(cuerpos):
-    global Sun, Mercury,Venus,Earth,Luna,Mars,Io,Europa,Ganimedes,Calisto
-    global Jupyter,Titan,Saturn,Uranus,Neptune, SaturnRing, dt
+    cont=0
     for body in cuerpos:
-        #Aceleración del planeta
-        xarray = np.array([body.pos.x, body.pos.y, body.pos.z])
-        varray = np.array([body.v.x, body.v.y, body.v.z])
-        ximas1, vimas1 = eulerMethod(acel, xarray, varray, dt)
-        #de la velocidad y posición del planeta.
-        body.pos = vector(ximas1[0],ximas1[1],ximas1[2])
-        body.v = vector(vimas1[0],vimas1[1],vimas1[2])
-        SaturnRing.pos = Saturn.pos
+
+        #Condición para que la nave no atraviese planetas.
+
+        if cont==15 and mag(Earth.pos-body.pos)<Earth.radius:
+            body.pos = Earth.pos + vector(0,Earth.radius,0)
+
+        else:
+            #Aceleración del planeta
+            xarray = np.array([body.pos.x, body.pos.y, body.pos.z])
+            varray = np.array([body.v.x, body.v.y, body.v.z])
+            ximas1, vimas1 = eulerMethod(acel, xarray, varray, dt)
+            #de la velocidad y posición del planeta.
+            body.pos = vector(ximas1[0],ximas1[1],ximas1[2])
+            body.v = vector(vimas1[0],vimas1[1],vimas1[2])
+            SaturnRing.pos = Saturn.pos
+
+        cont+=1
+
+
 
 """Calcular aceleraciones para impedir divisiones entre cero"""
 def acel(x):
-    global Sun, Mercury,Venus,Earth,Luna,Mars,Io,Europa,Ganimedes,Calisto
-    global Jupyter,Titan,Saturn,Uranus,Neptune, SaturnRing
+    global movBody
 
-    DM=x-vectorToNpArray(Mercury.pos)
-    DS=x-vectorToNpArray(Sun.pos)
-    DV=x-vectorToNpArray(Venus.pos)
-    DT=x-vectorToNpArray(Earth.pos)
-    DL=x-vectorToNpArray(Luna.pos)
-    DMars=x-vectorToNpArray(Mars.pos)
-    Dio=x-vectorToNpArray(Io.pos)
-    Deur=x-vectorToNpArray(Europa.pos)
-    Dgan=x-vectorToNpArray(Ganimedes.pos)
-    Dcal=x-vectorToNpArray(Calisto.pos)
-    DJ=x-vectorToNpArray(Jupyter.pos)
-    DTit=x-vectorToNpArray(Titan.pos)
-    DSat=x-vectorToNpArray(Saturn.pos)
-    DU=x-vectorToNpArray(Uranus.pos)
-    DN=x-vectorToNpArray(Neptune.pos)
-
-    distancias = ([DS, DM, DV, DL, DT, DMars, Dio, Deur, Dgan, Dcal, DJ, DTit,
-                  DSat, DU, DN])
-    cuerpos = ([Sun,Mercury,Venus,Luna,Earth,Mars,Io,Europa,Ganimedes,Calisto,
-                Jupyter,Titan,Saturn,Uranus,Neptune])
+    distancias = []
+    for i in movBody:
+        distancias.append(x-vectorToNpArray(i.pos))
 
     a = np.array([0.0,0.0,0.0])
     j=0
-    for i in cuerpos:
+    for i in movBody:
         norma = np.linalg.norm(distancias[j])
         if norma>0.0:
             a +=  i.mass * (distancias[j] / norma**3)
         j+=1
 
     return -G * a
+
+
 
 def vectorToNpArray(vec):
     return np.array([vec.x, vec.y, vec.z])

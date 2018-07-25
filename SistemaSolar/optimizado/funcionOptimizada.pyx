@@ -13,7 +13,7 @@ sca = np.sin(np.pi/2+ANG)
 cca = np.cos(np.pi/2+ANG)
 
 #Diferencial a usar
-dt=0.00002853881 #15 min
+dt=3.17097889e-8 #1 seg
 
 """Mercurio"""
 rmerc=0.38          #radio
@@ -146,102 +146,121 @@ Uranus = cc.celestialBody(mur, 0.1, np.array([rur*ca,rur*sa,0]),
 Neptune = cc.celestialBody(mnep, 0.1, np.array([rnep*ca,rnep*sa,0]),
                         np.array([vnep*cca, vnep*sca, 0]))
 
+movBody = [Sun,Mercury,Venus,Luna,Earth,Mars,Io,Europa,Ganimedes,
+              Calisto,Jupyter,Titan,Saturn,Uranus,Neptune]
 
+destino = Luna #Destino, se puede cambiar a cualquier planeta o Satélite.
 
 """Es la función principal, descripción en el archivo .pdf adjunto"""
 def f(vx,vy,inicio):
-    global Sun, Mercury,Venus,Earth,Luna,Mars,Io,Europa,Ganimedes,Calisto
-    global Jupyter,Titan,Saturn,Uranus,Neptune, dt, Msol
+    global movBody, dt, Msol, Earth, destino, UAkm, Luna
 
-    destino = Mars #Destino, se puede cambiar a cualquier planeta o Satélite.
-    tiempoLimite = 200000 #Número máximo de iteraciones.
+    tiempoLimite = 100000 #Número máximo de iteraciones.
+    tiempo = 0
+    tiempoEnOrbita = 0
+
     #Condición de penalización para que la rapidez de la nave no supere el
     #límite impuesto.
-    if(np.sqrt(vx**2+vy**2)>7.5):
+    if not (40320/UAkm)*(24*365)<np.sqrt(vx**2+vy**2)<(60000/UAkm)*(24*365):
         #Imprime los valores a evaluar y su resultado.
-        print(vx,vy,inicio,10000)
-        return 10000
+        print(vx,vy,inicio,100)
+        return 100
 
-    tiempo=0
     posiciones=[]
-    movBody = [Sun,Mercury,Venus,Luna,Earth,Mars,Io,Europa,Ganimedes,
-                  Calisto,Jupyter,Titan,Saturn,Uranus,Neptune]
+
     while True:
         #Tiempo inicial del viaje de la nave, es decir, la nave puede iniciar
         #su trayectoria mucho después de que se inicie la simulación.
+
         if tiempo==inicio:
             #cambiamos la posición inicial de la nave a la actual de la Tierra.
-            Ship = cc.celestialBody(50000/Msol, 0.00001, Earth.pos,
-                                    Earth.vel+np.array([vx, vy, 0.0]))
+            Ship = cc.celestialBody(546700/Msol, 0.1/UAkm,
+                   Earth.pos+np.array([0.0,Earth.radius,0.0]),
+                   Earth.vel+np.array([vx, vy, 0.0]))
             movBody.append(Ship)
             #Primer distancia Nave-destino, se usa abajo, se le resta un poco a
             #conveniencia, para lograr que las trayectorias se encaminen al
             #destino.
-            distOriginal=np.linalg.norm(Ship.pos-destino.pos)-0.1
+            distOriginal=np.linalg.norm(Ship.pos-destino.pos)-0.01
         #Movemos cada uno de los cuerpos en el sistema.
+
+        co = 0
         for body in movBody:
             #Aceleración del planeta
-            body.mov(acel(body.pos),dt)
+            if co==15 and np.linalg.norm(Earth.pos-body.pos)<Earth.radius:
+                body.pos = Earth.pos + np.array([0,Earth.radius,0])
+            else:
+                body.mov(acel(body.pos),dt)
+            co += 1
+
+
             if tiempo>=inicio:
+
+                #Condicion para beneficiar a las trayectorías que ponen en
+                #orbita a la nave sobre el destino.
+                if (np.linalg.norm(Ship.pos-destino.pos) <
+                   (destino.radius/Luna.radius)*15*destino.radius):
+                   tiempoEnOrbita += 1
+
                 #Si la distancia nave-destino es menor que 0.05 UA, se sale del
                 #while y regresa el valor más cercano.
-                if(np.linalg.norm(Ship.pos-destino.pos)<0.05):
-                    print(vx,vy,inicio,np.linalg.norm(Ship.pos-destino.pos))
-                    return np.linalg.norm(Ship.pos-destino.pos)
+                if(np.linalg.norm(Ship.pos-
+                                  destino.pos)==destino.radius+Ship.radius):
+                    print(vx,vy,inicio,
+                          np.linalg.norm(Ship.pos-destino.pos)/10 +
+                                        (tiempo/100-tiempoEnOrbita)/tiempoLimite)
+                    return (np.linalg.norm(Ship.pos-destino.pos)/10 +
+                           (tiempo/100-tiempoEnOrbita)/tiempoLimite)
+
                 #Si la nave se acerca mucho al Sol, se sale del while y regresa
                 #un valor de penalización.
                 if(np.linalg.norm(Ship.pos-Sun.pos)<0.5):
-                    print(vx,vy,inicio,5000)
-                    return 5000
+                    print(vx,vy,inicio,50)
+                    return 50
+
         #Hacemos una lista con todas las distancias Nave-Destino.
         if tiempo>=inicio:
             posiciones.append(np.linalg.norm(Ship.pos-destino.pos))
+
         #Contador que se ocupa para saber cuando iniciar el viaje de la nave.
         tiempo+=1
+
         #Condición de finalización del while, evitar un ciclo infinito.
         if(tiempo==tiempoLimite):
             break
+
     #Acomodamos de menor a mayor las distancias nave-destino.
     posiciones.sort()
+
     #Si la menor distancia a la que la nave estuvo del destino es menor
     #que la distancia original(Tierra-destino), de la cual sale la nave
     if  posiciones[0]<distOriginal:
-        print(vx,vy,inicio,np.linalg.norm(Ship.pos-destino.pos))
-        return posiciones[0]
-    print(vx,vy,inicio,np.linalg.norm(Ship.pos-destino.pos))
-    return np.linalg.norm(Ship.pos-destino.pos)
+        print(vx,vy,inicio,
+              np.linalg.norm(Ship.pos-destino.pos)/10 +
+                             (tiempo/100-tiempoEnOrbita)/tiempoLimite)
+        return posiciones[0]/10 + (tiempo/10-tiempoEnOrbita)/tiempoLimite
+
+    print(vx,vy,inicio,
+          np.linalg.norm(Ship.pos-destino.pos)/10 +
+                        (tiempo/100-tiempoEnOrbita)/tiempoLimite)
+    return (np.linalg.norm(Ship.pos-destino.pos)/10 +
+           (tiempo/100-tiempoEnOrbita)/tiempoLimite)
+
 
 """Calcular aceleraciones para impedir divisiones entre cero"""
 def acel(x):
-    global Sun, Mercury,Venus,Earth,Luna,Mars,Io,Europa,Calisto,Ganimedes
-    global Jupyter,Titan,Saturn,Uranus,Neptune,dt, Msol
+    global movBody
 
-    DM=x-Mercury.pos
-    DS=x-Sun.pos
-    DV=x-Venus.pos
-    DT=x-Earth.pos
-    DL=x-Luna.pos
-    DMars=x-Mars.pos
-    Dio=x-Io.pos
-    Deur=x-Europa.pos
-    Dgan=x-Ganimedes.pos
-    Dcal=x-Calisto.pos
-    DJ=x-Jupyter.pos
-    DTit=x-Titan.pos
-    DSat=x-Saturn.pos
-    DU=x-Uranus.pos
-    DN=x-Neptune.pos
-
-    distancias = ([DS, DM, DV, DL, DT, DMars, Dio, Deur, Dgan, Dcal, DJ, DTit,
-                  DSat, DU, DN])
-    cuerpos = ([Sun,Mercury,Venus,Luna,Earth,Mars,Io,Europa,Ganimedes,Calisto,
-                Jupyter,Titan,Saturn,Uranus,Neptune])
+    distancias = []
+    for i in movBody:
+        distancias.append(x-i.pos)
 
     a = np.array([0.0,0.0,0.0])
     j=0
-    for i in cuerpos:
+    for i in movBody:
         norma = np.linalg.norm(distancias[j])
         if norma>0.0:
             a +=  i.mass * (distancias[j] / norma**3)
         j+=1
+
     return -G * a
