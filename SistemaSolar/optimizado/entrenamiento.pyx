@@ -21,8 +21,8 @@ UAkm = 1.496e+8 #km
 
 vMaxCohete = (60000/UAkm)*(24*365)
 
-optimo=ag.evolucion(-vMaxCohete, vMaxCohete, 50000, ag.poblacion(50,20),
-                    ag.poblacion(50,20), ag.poblacion(50,20), 25)
+optimo=ag.evolucion(-vMaxCohete, vMaxCohete, 30*24*365, ag.poblacion(25,20),
+                    ag.poblacion(25,20), ag.poblacion(25,20), 20)
 print(optimo)
 #Guardamos en un .txt
 optimos=open('noop/optimos.txt', 'w')
